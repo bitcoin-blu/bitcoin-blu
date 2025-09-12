@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+# Copyright (c) 2023 The Bitcoin Core developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+"""Test validateaddress for main chain"""
+
+from test_framework.test_framework import BitcoinTestFramework
+
+from test_framework.util import assert_equal
+
+INVALID_DATA = [
+    # BIP 173
+    (
+        "tc1qw508d6qejxtdg4y5r3zarvary0c5xw7kg3g4ty",
+        "Invalid or unsupported Segwit (Bech32) or Base58 encoding.",  # Invalid hrp
+        [],
+    ),
+]
+VALID_DATA = [
+    (
+        "bb1qtvq05x69au9mmejvqrcd63eefznseehsws3636",
+        "00145b00fa1b45ef0bbde64c00f0dd473948a70ce6f0",
+    ),
+     ("BB1SZEGQTCZYUG", "60021650"),
+]
+
+
+class ValidateAddressMainTest(BitcoinTestFramework):
+    def set_test_params(self):
+        self.setup_clean_chain = True
+        self.chain = ""  # main
+        self.num_nodes = 1
+        self.extra_args = [["-prune=899"]] * self.num_nodes
+
+    def check_valid(self, addr, spk):
+        info = self.nodes[0].validateaddress(addr)
+        self.log.info("HELLO-*_*_*_*_*_*_*_*_*_*_*_*_*");
+        self.log.info(info);
+        assert_equal(info["isvalid"], True)
+        assert_equal(info["scriptPubKey"], spk)
+        assert "error" not in info
+        assert "error_locations" not in info
+
+    def check_invalid(self, addr, error_str, error_locations):
+        res = self.nodes[0].validateaddress(addr)
+        assert_equal(res["isvalid"], False)
+        assert_equal(res["error"], error_str)
+        assert_equal(res["error_locations"], error_locations)
+
+    def test_validateaddress(self):
+        for (addr, error, locs) in INVALID_DATA:
+            self.check_invalid(addr, error, locs)
+        for (addr, spk) in VALID_DATA:
+            self.check_valid(addr, spk)
+
+    def run_test(self):
+        self.test_validateaddress()
+
+
+if __name__ == "__main__":
+    ValidateAddressMainTest(__file__).main()
