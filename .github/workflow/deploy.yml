@@ -1,0 +1,12 @@
+name: Call Private Workflow
+
+on:
+  workflow_dispatch:  # allows manual triggering
+  push:
+    branches:
+      - main   # adjust to your public repo branch
+
+jobs:
+  build:
+    uses: bitcoin-blu/bitcoin-blu-workflow/.github/workflows/build-docker.yml@main
+    secrets: inherit
