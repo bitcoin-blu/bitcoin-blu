@@ -1044,7 +1044,7 @@ static void ParseGetInfoResult(UniValue& result)
         CYAN = "\x1B[36m";
     }
 
-    std::string result_string = strprintf("%sChain: %s%s\n", BLUE, result["chain"].getValStr(), RESET);
+    std::string result_string = strprintf("%sChain: %s%s\n", BBLU, result["chain"].getValStr(), RESET);
     result_string += strprintf("Blocks: %s\n", result["blocks"].getValStr());
     result_string += strprintf("Headers: %s\n", result["headers"].getValStr());
 

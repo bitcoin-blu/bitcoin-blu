@@ -26,14 +26,14 @@ EditAddressDialog::EditAddressDialog(Mode _mode, QWidget* parent)
     switch(mode)
     {
     case NewSendingAddress:
-        setWindowTitle(tr("New sending BLU-address"));
+        setWindowTitle(tr("New sending BBLU-address"));
         break;
     case EditReceivingAddress:
-        setWindowTitle(tr("Edit receiving BLU-address"));
+        setWindowTitle(tr("Edit receiving BBLU-address"));
         ui->addressEdit->setEnabled(false);
         break;
     case EditSendingAddress:
-        setWindowTitle(tr("Edit sending BLU-address"));
+        setWindowTitle(tr("Edit sending BBLU-address"));
         break;
     }
 

@@ -146,6 +146,6 @@ void LogPackageVersion()
 #else
     version_string += " (release build)";
 #endif
-    LogPrintf(PACKAGE_NAME " (BLU) version %s\n", version_string);
+    LogPrintf(PACKAGE_NAME " (BBLU) version %s\n", version_string);
 }
 } // namespace init

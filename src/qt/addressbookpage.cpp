@@ -323,8 +323,8 @@ void AddressBookPage::updateWindowsTitleWithWalletName()
     if (mode == ForEditing) {
         switch(tab)
         {
-        case SendingTab: setWindowTitle(tr("Sending BLU-addresses - %1").arg(walletName)); break;
-        case ReceivingTab: setWindowTitle(tr("Receiving BLU-addresses - %1").arg(walletName)); break;
+        case SendingTab: setWindowTitle(tr("Sending BBLU-addresses - %1").arg(walletName)); break;
+        case ReceivingTab: setWindowTitle(tr("Receiving BBLU-addresses - %1").arg(walletName)); break;
         }
     }
 }
