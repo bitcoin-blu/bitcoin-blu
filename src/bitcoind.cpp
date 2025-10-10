@@ -135,7 +135,7 @@ static bool ProcessInitCommands(ArgsManager& args)
 {
     // Process help and version before taking care about datadir
     if (HelpRequested(args) || args.IsArgSet("-version")) {
-        std::string strUsage = PACKAGE_NAME " (BLU) version " + FormatFullVersion() + "\n";
+        std::string strUsage = PACKAGE_NAME " (BBLU) version " + FormatFullVersion() + "\n";
 
         if (args.IsArgSet("-version")) {
             strUsage += FormatParagraph(LicenseInfo());

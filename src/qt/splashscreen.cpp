@@ -117,7 +117,7 @@ SplashScreen::SplashScreen(const NetworkStyle* networkStyle)
     pixPaint.end();
 
     // Set window title
-    setWindowTitle(titleText + " (BLU)" + titleAddText);
+    setWindowTitle(titleText + " (BBLU)" + titleAddText);
 
     // Resize window and move to center of desktop, disallow resizing
     QRect r(QPoint(), QSize(pixmap.size().width()/devicePixelRatio,pixmap.size().height()/devicePixelRatio));

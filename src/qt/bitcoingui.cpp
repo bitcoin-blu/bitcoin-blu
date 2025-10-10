@@ -1258,7 +1258,7 @@ void BitcoinGUI::message(const QString& title, QString message, unsigned int sty
     }
 
     if (!msgType.isEmpty()) {
-        strTitle += " -(BLU)- " + msgType;
+        strTitle += " -(BBLU)- " + msgType;
     }
 
     if (style & CClientUIInterface::ICON_ERROR) {
@@ -1494,14 +1494,14 @@ void BitcoinGUI::updateWindowTitle()
     if (walletFrame) {
         WalletModel* const wallet_model = walletFrame->currentWalletModel();
         if (wallet_model && !wallet_model->getWalletName().isEmpty()) {
-            window_title += " (BLU) " + wallet_model->getDisplayName();
+            window_title += " (BBLU) " + wallet_model->getDisplayName();
         }
     }
 #endif
     if (!m_network_style->getTitleAddText().isEmpty()) {
         window_title += m_network_style->getTitleAddText();
     }
-    setWindowTitle("(BLU) " + window_title);
+    setWindowTitle("(BBLU) " + window_title);
 }
 
 void BitcoinGUI::showNormalIfMinimized(bool fToggleHidden)
