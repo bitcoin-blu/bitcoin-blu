@@ -80,12 +80,17 @@ std::string CopyrightHolders(const std::string& strPrefix)
     if (copyright_devs.find("Bitcoin Core") == std::string::npos) {
         strCopyrightHolders += "\n" + strPrefix + "The Bitcoin Core developers";
     }
+    
+    // Add Bitcoin-Blu copyright line
+    strCopyrightHolders += "\n" + strprintf(_("Copyright (C) %i The Bitcoin-Blu Core developers").translated, COPYRIGHT_YEAR);
+    
     return strCopyrightHolders;
 }
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/bitcoin/bitcoin>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/bitcoin-blu/bitcoin-blu>";
+    const std::string URL_BITCOIN_CORE = "<https://github.com/bitcoin/bitcoin>";
 
     return CopyrightHolders(strprintf(_("Copyright (C) %i-%i").translated, 2009, COPYRIGHT_YEAR) + " ") + "\n" +
            "\n" +
@@ -94,8 +99,12 @@ std::string LicenseInfo()
            "\n" +
            strprintf(_("The source code is available from %s.").translated, URL_SOURCE_CODE) +
            "\n" +
+           strprintf(_("This software is forked from Bitcoin Core (%s).").translated, URL_BITCOIN_CORE) +
+           "\n" +
            "\n" +
            _("This is experimental software.").translated + "\n" +
+           _("Use at your own risk. Bitcoin-Blu Core is independent from Bitcoin Core.").translated + "\n" +
+           "\n" +
            strprintf(_("Distributed under the MIT software license, see the accompanying file %s or %s").translated, "COPYING", "<https://opensource.org/licenses/MIT>") +
            "\n";
 }

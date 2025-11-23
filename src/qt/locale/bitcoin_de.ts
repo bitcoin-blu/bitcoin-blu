@@ -4857,6 +4857,18 @@ Verifikations-Error: %s</translation>
         <translation type="unfinished">Dies ist experimentelle Software.</translation>
     </message>
     <message>
+        <source>Copyright (C) %i The Bitcoin-Blu Core developers</source>
+        <translation type="unfinished">Copyright (C) %i Die Bitcoin-Blu Core-Entwickler</translation>
+    </message>
+    <message>
+        <source>This software is forked from Bitcoin Core (%s).</source>
+        <translation type="unfinished">Diese Software ist ein Fork von Bitcoin Core (%s).</translation>
+    </message>
+    <message>
+        <source>Use at your own risk. Bitcoin-Blu Core is independent from Bitcoin Core.</source>
+        <translation type="unfinished">Verwendung auf eigenes Risiko. Bitcoin-Blu Core ist unabhängig von Bitcoin Core.</translation>
+    </message>
+    <message>
         <source>This is the minimum transaction fee you pay on every transaction.</source>
         <translation type="unfinished">Dies ist die kleinstmögliche Gebühr, die beim Senden einer Transaktion fällig wird.</translation>
     </message>

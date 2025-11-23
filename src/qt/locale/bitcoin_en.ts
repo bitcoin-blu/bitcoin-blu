@@ -6483,6 +6483,18 @@ Unable to restore backup of wallet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Copyright (C) %i The Bitcoin-Blu Core developers</source>
+        <translation type="unfinished">Copyright (C) %i The Bitcoin-Blu Core developers</translation>
+    </message>
+    <message>
+        <source>This software is forked from Bitcoin Core (%s).</source>
+        <translation type="unfinished">This software is forked from Bitcoin Core (%s).</translation>
+    </message>
+    <message>
+        <source>Use at your own risk. Bitcoin-Blu Core is independent from Bitcoin Core.</source>
+        <translation type="unfinished">Use at your own risk. Bitcoin-Blu Core is independent from Bitcoin Core.</translation>
+    </message>
+    <message>
         <location line="+1"/>
         <source>This is the minimum transaction fee you pay on every transaction.</source>
         <translation type="unfinished"></translation>
