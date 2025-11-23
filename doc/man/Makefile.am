@@ -13,15 +13,15 @@ if BUILD_BITCOIN_CLI
 endif
 
 if BUILD_BITCOIN_TX
-  dist_man1_MANS+=bitcoin-tx.1
+  dist_man1_MANS+=bitcoinblu-tx.1
 endif
 
 if BUILD_BITCOIN_UTIL
-  dist_man1_MANS+=bitcoin-util.1
+  dist_man1_MANS+=bitcoinblu-util.1
 endif
 
 if ENABLE_WALLET
 if BUILD_BITCOIN_WALLET
-  dist_man1_MANS+=bitcoin-wallet.1
+  dist_man1_MANS+=bitcoinblu-wallet.1
 endif
 endif
