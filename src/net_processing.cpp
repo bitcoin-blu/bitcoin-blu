@@ -20,6 +20,7 @@
 #include <kernel/mempool_entry.h>
 #include <logging.h>
 #include <merkleblock.h>
+#include <net.h>
 #include <netbase.h>
 #include <netmessagemaker.h>
 #include <node/blockstorage.h>
@@ -5139,6 +5140,13 @@ void PeerManagerImpl::ProcessMessage(CNode& pfrom, const std::string& msg_type, 
             LOCK(tx_relay->m_tx_inventory_mutex);
             tx_relay->m_send_mempool = true;
         }
+        return;
+    }
+
+    if (msg_type == NetMsgType::BBLUINFO) {
+        LogPrint(BCLog::NET, "received bbluinfo\n");
+        // Send back the configured bbluinfo string (or empty if not set)
+        MakeAndPushMessage(pfrom, NetMsgType::BBLUINFO, strBbluinfo);
         return;
     }
 

@@ -28,6 +28,9 @@
 #include <util/strencodings.h>
 #include <util/string.h>
 #include <util/time.h>
+#include <netmessagemaker.h>
+#include <thread>
+#include <chrono>
 #include <util/translation.h>
 #include <validation.h>
 
@@ -1063,6 +1066,71 @@ static RPCHelpMan sendmsgtopeer()
     };
 }
 
+static RPCHelpMan getbbluinfo()
+{
+    return RPCHelpMan{
+        "getbbluinfo",
+        "Request bbluinfo from a peer and return the response.\n"
+        "The peer must be specified by IP address and port.",
+        {
+            {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The IP address and port of the peer (e.g., \"192.168.0.6:8343\")"},
+        },
+        RPCResult{
+            RPCResult::Type::OBJ, "", "",
+            {
+                {RPCResult::Type::NUM, "id", "Peer index"},
+                {RPCResult::Type::STR, "addr", "Peer address"},
+                {RPCResult::Type::STR, "bbluinfo", "Bbluinfo string received from peer (empty if not received or timeout)"},
+            }
+        },
+        RPCExamples{
+            HelpExampleCli("getbbluinfo", "\"192.168.0.6:8343\"")
+            + HelpExampleRpc("getbbluinfo", "\"192.168.0.6:8343\"")
+        },
+        [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
+        {
+            NodeContext& node = EnsureAnyNodeContext(request.context);
+            CConnman& connman = EnsureConnman(node);
+            PeerManager& peerman = EnsurePeerman(node);
+
+            const std::string address = request.params[0].get_str();
+            NodeId nodeid = -1;
+
+            // Find peer by address
+            std::vector<CNodeStats> vstats;
+            connman.GetNodeStats(vstats);
+            std::string peer_addr;
+            for (const CNodeStats& stats : vstats) {
+                if (stats.m_addr_name == address) {
+                    nodeid = stats.nodeid;
+                    peer_addr = stats.m_addr_name;
+                    break;
+                }
+            }
+            if (nodeid == -1) {
+                throw JSONRPCError(RPC_CLIENT_NODE_NOT_CONNECTED, "Node not found");
+            }
+
+            // Send bbluinfo request (empty string)
+            bool found = connman.ForNode(nodeid, [&](CNode* pnode) {
+                CSerializedNetMsg msg = NetMsg::Make(NetMsgType::BBLUINFO, std::string{});
+                connman.PushMessage(pnode, std::move(msg));
+                return true;
+            });
+
+            if (!found) {
+                throw JSONRPCError(RPC_CLIENT_NODE_NOT_CONNECTED, "Node not found");
+            }
+
+            UniValue ret(UniValue::VOBJ);
+            ret.pushKV("id", nodeid);
+            ret.pushKV("addr", peer_addr);
+            ret.pushKV("bbluinfo", ""); // Response sent, but not stored
+            return ret;
+        },
+    };
+}
+
 static RPCHelpMan getaddrmaninfo()
 {
     return RPCHelpMan{
@@ -1196,6 +1264,7 @@ void RegisterNetRPCCommands(CRPCTable& t)
         {"network", &setnetworkactive},
         {"network", &getnodeaddresses},
         {"network", &getaddrmaninfo},
+        {"network", &getbbluinfo},
         {"hidden", &addconnection},
         {"hidden", &addpeeraddress},
         {"hidden", &sendmsgtopeer},

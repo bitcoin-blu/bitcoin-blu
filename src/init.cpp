@@ -633,6 +633,7 @@ void SetupServerArgs(ArgsManager& argsman)
                    ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
     argsman.AddArg("-printpriority", strprintf("Log transaction fee rate in " + CURRENCY_UNIT + "/kvB when mining blocks (default: %u)", DEFAULT_PRINT_MODIFIED_FEE), ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
     argsman.AddArg("-uacomment=<cmt>", "Append comment to the user agent string", ArgsManager::ALLOW_ANY, OptionsCategory::DEBUG_TEST);
+    argsman.AddArg("-bbluinfo=<str>", "String to respond with when peers request bbluinfo (e.g., donation address, max 256 chars)", ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
 
     SetupChainParamsBaseOptions(argsman);
 
@@ -1365,6 +1366,16 @@ bool AppInitMain(NodeContext& node, interfaces::BlockAndHeaderTipInfo* tip_info)
     if (strSubVersion.size() > MAX_SUBVERSION_LENGTH) {
         return InitError(strprintf(_("Total length of network version string (%i) exceeds maximum length (%i). Reduce the number or size of uacomments."),
             strSubVersion.size(), MAX_SUBVERSION_LENGTH));
+    }
+
+    // Read bbluinfo string from config (max 256 characters)
+    constexpr size_t MAX_BBLUINFO_LENGTH = 256;
+    if (args.IsArgSet("-bbluinfo")) {
+        strBbluinfo = args.GetArg("-bbluinfo", "");
+        if (strBbluinfo.size() > MAX_BBLUINFO_LENGTH) {
+            return InitError(strprintf(_("bbluinfo string length (%i) exceeds maximum length (%i)."),
+                strBbluinfo.size(), MAX_BBLUINFO_LENGTH));
+        }
     }
 
     if (args.IsArgSet("-onlynet")) {
