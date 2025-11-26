@@ -1122,10 +1122,23 @@ static RPCHelpMan getbbluinfo()
                 throw JSONRPCError(RPC_CLIENT_NODE_NOT_CONNECTED, "Node not found");
             }
 
+            // Wait for response (up to 2 seconds)
+            std::string bbluinfo_response;
+            for (int i = 0; i < 20; ++i) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                CNodeStateStats statestats;
+                if (peerman.GetNodeStateStats(nodeid, statestats)) {
+                    bbluinfo_response = statestats.bbluinfo;
+                    if (!bbluinfo_response.empty()) {
+                        break;
+                    }
+                }
+            }
+
             UniValue ret(UniValue::VOBJ);
             ret.pushKV("id", nodeid);
             ret.pushKV("addr", peer_addr);
-            ret.pushKV("bbluinfo", ""); // Response sent, but not stored
+            ret.pushKV("bbluinfo", bbluinfo_response);
             return ret;
         },
     };
