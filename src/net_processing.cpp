@@ -393,9 +393,6 @@ struct Peer {
      * timestamp the peer sent in the version message. */
     std::atomic<std::chrono::seconds> m_time_offset{0s};
 
-    /** Bbluinfo string received from peer (for RPC retrieval) */
-    std::string m_bbluinfo_received GUARDED_BY(NetEventsInterface::g_msgproc_mutex);
-
     explicit Peer(NodeId id, ServiceFlags our_services)
         : m_id{id}
         , m_our_services{our_services}
@@ -1918,10 +1915,6 @@ bool PeerManagerImpl::GetNodeStateStats(NodeId nodeid, CNodeStateStats& stats) c
         }
     }
     stats.time_offset = peer->m_time_offset;
-    {
-        LOCK(NetEventsInterface::g_msgproc_mutex);
-        stats.bbluinfo = peer->m_bbluinfo_received;
-    }
 
     return true;
 }
@@ -5152,17 +5145,6 @@ void PeerManagerImpl::ProcessMessage(CNode& pfrom, const std::string& msg_type, 
 
     if (msg_type == NetMsgType::BBLUINFO) {
         LogPrint(BCLog::NET, "received bbluinfo\n");
-        // Parse the received bbluinfo string
-        std::string received_bbluinfo;
-        if (!vRecv.empty()) {
-            try {
-                vRecv >> LIMITED_STRING(received_bbluinfo, 256);
-                // Store the received bbluinfo for RPC retrieval
-                peer->m_bbluinfo_received = received_bbluinfo;
-            } catch (const std::ios_base::failure&) {
-                // Ignore deserialization errors
-            }
-        }
         // Send back the configured bbluinfo string (or empty if not set)
         MakeAndPushMessage(pfrom, NetMsgType::BBLUINFO, strBbluinfo);
         return;
