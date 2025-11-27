@@ -10,6 +10,7 @@
 #include <chainparams.h>
 #include <clientversion.h>
 #include <core_io.h>
+#include <logging.h>
 #include <net_permissions.h>
 #include <net_processing.h>
 #include <net_types.h> // For banmap_t
@@ -1066,12 +1067,13 @@ static RPCHelpMan sendmsgtopeer()
     };
 }
 
-static RPCHelpMan getbbluinfo()
+static RPCHelpMan askbbluinfo()
 {
     return RPCHelpMan{
-        "getbbluinfo",
-        "Request bbluinfo from a peer and return the response.\n"
-        "The peer must be specified by IP address and port.",
+        "askbbluinfo",
+        "Request bbluinfo from a peer.\n"
+        "The peer must be specified by IP address and port.\n"
+        "Use listbbluinfo to check if the response has arrived.",
         {
             {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The IP address and port of the peer (e.g., \"192.168.0.6:8343\")"},
         },
@@ -1080,26 +1082,25 @@ static RPCHelpMan getbbluinfo()
             {
                 {RPCResult::Type::NUM, "id", "Peer index"},
                 {RPCResult::Type::STR, "addr", "Peer address"},
-                {RPCResult::Type::STR, "bbluinfo", "Bbluinfo string received from peer (empty if not received or timeout)"},
+                {RPCResult::Type::STR, "status", "Status message"},
             }
         },
         RPCExamples{
-            HelpExampleCli("getbbluinfo", "\"192.168.0.6:8343\"")
-            + HelpExampleRpc("getbbluinfo", "\"192.168.0.6:8343\"")
+            HelpExampleCli("askbbluinfo", "\"192.168.0.6:8343\"")
+            + HelpExampleRpc("askbbluinfo", "\"192.168.0.6:8343\"")
         },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
         {
             NodeContext& node = EnsureAnyNodeContext(request.context);
             CConnman& connman = EnsureConnman(node);
-            PeerManager& peerman = EnsurePeerman(node);
 
             const std::string address = request.params[0].get_str();
             NodeId nodeid = -1;
+            std::string peer_addr;
 
             // Find peer by address
             std::vector<CNodeStats> vstats;
             connman.GetNodeStats(vstats);
-            std::string peer_addr;
             for (const CNodeStats& stats : vstats) {
                 if (stats.m_addr_name == address) {
                     nodeid = stats.nodeid;
@@ -1111,9 +1112,10 @@ static RPCHelpMan getbbluinfo()
                 throw JSONRPCError(RPC_CLIENT_NODE_NOT_CONNECTED, "Node not found");
             }
 
-            // Send bbluinfo request (empty string)
+            // Send askbbluinfo request (empty string)
             bool found = connman.ForNode(nodeid, [&](CNode* pnode) {
-                CSerializedNetMsg msg = NetMsg::Make(NetMsgType::BBLUINFO, std::string{});
+                LogPrint(BCLog::NET, "sending askbbluinfo to peer=%d (%s)\n", nodeid, peer_addr);
+                CSerializedNetMsg msg = NetMsg::Make(NetMsgType::ASKBBLUINFO, std::string{});
                 connman.PushMessage(pnode, std::move(msg));
                 return true;
             });
@@ -1125,7 +1127,54 @@ static RPCHelpMan getbbluinfo()
             UniValue ret(UniValue::VOBJ);
             ret.pushKV("id", nodeid);
             ret.pushKV("addr", peer_addr);
-            ret.pushKV("bbluinfo", ""); // Response sent, but not stored
+            ret.pushKV("status", "Request sent. Use listbbluinfo to check for response.");
+            return ret;
+        },
+    };
+}
+
+static RPCHelpMan listbbluinfo()
+{
+    return RPCHelpMan{
+        "listbbluinfo",
+        "List all connected peers and their bbluinfo values (if received).",
+        {},
+        RPCResult{
+            RPCResult::Type::ARR, "", "",
+            {
+                {RPCResult::Type::OBJ, "", "",
+                {
+                    {RPCResult::Type::NUM, "id", "Peer index"},
+                    {RPCResult::Type::STR, "addr", "Peer address"},
+                    {RPCResult::Type::STR, "bbluinfo", "Bbluinfo string received from peer (empty if not received yet)"},
+                }},
+            }
+        },
+        RPCExamples{
+            HelpExampleCli("listbbluinfo", "")
+            + HelpExampleRpc("listbbluinfo", "")
+        },
+        [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
+        {
+            NodeContext& node = EnsureAnyNodeContext(request.context);
+            CConnman& connman = EnsureConnman(node);
+            PeerManager& peerman = EnsurePeerman(node);
+
+            std::vector<CNodeStats> vstats;
+            connman.GetNodeStats(vstats);
+
+            UniValue ret(UniValue::VARR);
+            for (const CNodeStats& stats : vstats) {
+                CNodeStateStats statestats;
+                if (peerman.GetNodeStateStats(stats.nodeid, statestats)) {
+                    UniValue obj(UniValue::VOBJ);
+                    obj.pushKV("id", stats.nodeid);
+                    obj.pushKV("addr", stats.m_addr_name);
+                    obj.pushKV("bbluinfo", statestats.bbluinfo);
+                    ret.push_back(obj);
+                }
+            }
+
             return ret;
         },
     };
@@ -1264,7 +1313,8 @@ void RegisterNetRPCCommands(CRPCTable& t)
         {"network", &setnetworkactive},
         {"network", &getnodeaddresses},
         {"network", &getaddrmaninfo},
-        {"network", &getbbluinfo},
+        {"network", &askbbluinfo},
+        {"network", &listbbluinfo},
         {"hidden", &addconnection},
         {"hidden", &addpeeraddress},
         {"hidden", &sendmsgtopeer},

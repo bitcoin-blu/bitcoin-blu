@@ -393,6 +393,10 @@ struct Peer {
      * timestamp the peer sent in the version message. */
     std::atomic<std::chrono::seconds> m_time_offset{0s};
 
+    /** Bbluinfo string received from peer (for RPC retrieval) */
+    mutable Mutex m_bbluinfo_mutex;
+    std::string m_bbluinfo_received GUARDED_BY(m_bbluinfo_mutex);
+
     explicit Peer(NodeId id, ServiceFlags our_services)
         : m_id{id}
         , m_our_services{our_services}
@@ -1915,6 +1919,10 @@ bool PeerManagerImpl::GetNodeStateStats(NodeId nodeid, CNodeStateStats& stats) c
         }
     }
     stats.time_offset = peer->m_time_offset;
+    {
+        LOCK(peer->m_bbluinfo_mutex);
+        stats.bbluinfo = peer->m_bbluinfo_received;
+    }
 
     return true;
 }
@@ -5143,10 +5151,33 @@ void PeerManagerImpl::ProcessMessage(CNode& pfrom, const std::string& msg_type, 
         return;
     }
 
-    if (msg_type == NetMsgType::BBLUINFO) {
-        LogPrint(BCLog::NET, "received bbluinfo\n");
+    if (msg_type == NetMsgType::ASKBBLUINFO) {
+        LogPrint(BCLog::NET, "received askbbluinfo from peer=%d\n", pfrom.GetId());
         // Send back the configured bbluinfo string (or empty if not set)
-        MakeAndPushMessage(pfrom, NetMsgType::BBLUINFO, strBbluinfo);
+        LogPrint(BCLog::NET, "sending sendbbluinfo to peer=%d: %s\n", pfrom.GetId(), strBbluinfo.empty() ? "(empty)" : strBbluinfo);
+        MakeAndPushMessage(pfrom, NetMsgType::SENDBBLUINFO, strBbluinfo);
+        return;
+    }
+
+    if (msg_type == NetMsgType::SENDBBLUINFO) {
+        // Parse the received bbluinfo string
+        std::string received_bbluinfo;
+        if (!vRecv.empty()) {
+            try {
+                vRecv >> LIMITED_STRING(received_bbluinfo, 256);
+                LogPrint(BCLog::NET, "received sendbbluinfo from peer=%d: %s\n", pfrom.GetId(), received_bbluinfo.empty() ? "(empty)" : received_bbluinfo);
+                // Store the received bbluinfo for RPC retrieval
+                {
+                    LOCK(peer->m_bbluinfo_mutex);
+                    peer->m_bbluinfo_received = received_bbluinfo;
+                }
+            } catch (const std::ios_base::failure&) {
+                // Ignore deserialization errors
+                LogPrint(BCLog::NET, "failed to deserialize bbluinfo from peer=%d\n", pfrom.GetId());
+            }
+        } else {
+            LogPrint(BCLog::NET, "received sendbbluinfo from peer=%d: (empty message)\n", pfrom.GetId());
+        }
         return;
     }
 
