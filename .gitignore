@@ -11,6 +11,12 @@ src/bitcoin-tx
 src/bitcoin-util
 src/bitcoin-chainstate
 src/bitcoin-wallet
+src/bitcoinblu-cli
+src/bitcoinblu-d
+src/bitcoinblu-tx
+src/bitcoinblu-util
+src/bitcoinblu-wallet
+src/qt/bitcoinblu-qt
 src/test/fuzz/fuzz
 src/test/test_bitcoin
 src/qt/test/test_bitcoin-qt
