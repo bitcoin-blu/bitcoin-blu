@@ -169,6 +169,8 @@ extern bool fListen;
 
 /** Subversion as sent to the P2P network in `version` messages */
 extern std::string strSubVersion;
+/** Bbluinfo string to respond with when peers request bbluinfo */
+extern std::string strBbluinfo;
 
 struct LocalServiceInfo {
     int nScore;
