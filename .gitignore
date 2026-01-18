@@ -113,6 +113,7 @@ qrc_*.cpp
 
 # Mac specific
 .DS_Store
+**/.DS_Store
 build
 
 # Previous releases
