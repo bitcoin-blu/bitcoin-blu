@@ -153,7 +153,7 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("seed.bitcoin-blu.org.");
+        vSeeds.emplace_back("dnsseed.bitcoin-02.net.");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,25); // 0x19
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,86); // 0x56
