@@ -154,7 +154,9 @@ Coin type | Path component (coin_type')	| Symbol | Coin
 | :--- | :--- | :--- | :---
 0 | 0x80000000     | BTC      | Bitcoin
 1 | 0x80000001     |          | Testnet (all coins)
-? | --> 0x80426c63 | --> BBLU | Bitcoin-Blu
+4353123 | 0x80426c63 | BBLU | Bitcoin-Blu
+
+Registered in [SLIP-0044](https://github.com/satoshilabs/slips/blob/master/slip-0044.md) as coin type `4353123` (`0x426c63`). The hardened path component is `0x80426c63`.
 
 
 ### base58 prefixes
