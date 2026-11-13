@@ -309,7 +309,7 @@ public:
         consensus.CSVHeight = 1;
         consensus.SegwitHeight = 1;
         consensus.MinBIP9WarningHeight = 0;
-        consensus.powLimit = uint256S("00ffff0000000000000000000000000000000000000000000000000000000000");
+        consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -351,16 +351,15 @@ public:
         // assert(consensus.hashGenesisBlock == uint256S("003f0e15f164e2bb853c5885f2a92a38e79fbfa5c2f15dd077482f6529a0dd30"));
         // assert(genesis.hashMerkleRoot == uint256S("7f4ee7359ea73fa1c504843b54ed243e16b43f6b838c7d18b4c5ccdc808bac37"));
 
-        genesis = CreateGenesisBlock(1753427181, 99411666 , 0x1D00FFFF, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1794589074, 1783805895, 0x1D00FFFF, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256{"0000000043770b6cd3992ee9602eaa941d8a5de392c1f1baf1f55eb9cd898be6"});
+        assert(consensus.hashGenesisBlock == uint256{"000000006e5b4222eab7cce9ec5e1cb507152fcf65ebc0ffe555e8114aa11480"});
         assert(genesis.hashMerkleRoot == uint256{"57b495ee87db5e2aa6e7fdd746dc98c0eb5901282829679dfc831829fe41297a"});
 
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("seed.testnet4.bitcoin.sprovoost.nl."); // Sjors Provoost
-        vSeeds.emplace_back("seed.testnet4.wiz.biz."); // Jason Maurice
+        vSeeds.emplace_back("dnsseed-testnet4.bitcoin-02.net.");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -380,7 +379,7 @@ public:
                 {},
             }
         };
-
+        /*
         m_assumeutxo_data = {
             {}
         };
@@ -391,6 +390,7 @@ public:
             .tx_count = 757229,
             .dTxRate  = 0.01570402633472492,
         };
+        */
     }
 };
 
