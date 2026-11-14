@@ -27,7 +27,7 @@ std::string ChainTypeToString(ChainType chain)
 
 std::optional<ChainType> ChainTypeFromString(std::string_view chain)
 {
-    if (chain == "main") {
+    if (chain == "main" || chain == "main-blu") {
         return ChainType::MAIN;
     } else if (chain == "test-blu") {
         return ChainType::TESTNET;
