@@ -206,14 +206,14 @@ public:
         consensus.nSubsidyHalvingInterval = 210000;
         consensus.script_flag_exceptions.emplace( // BIP16 exception
             uint256{"00000000dd30457c001f4095d208cc1296b0eed002427aa599874af7a432b105"}, SCRIPT_VERIFY_NONE);
-        consensus.BIP34Height = 21111;
-        consensus.BIP34Hash = uint256{"0000000023b3a96d3484e5abb3755c413e7d41500f8e2a5c3f0dd01299cd8ef8"};
-        consensus.BIP65Height = 581885; // 00000000007f6655f22f98e72ed80d8b06dc761d5da09df0fa1dc4be4f861eb6
-        consensus.BIP66Height = 330776; // 000000002104c8c45e99a8853285a3b592602a3ccde2b832481da85e9e4ba182
-        consensus.CSVHeight = 770112; // 00000000025e930139bac5c6c31a403776da130831ab85be56578f3fa75369bb
-        consensus.SegwitHeight = 834624; // 00000000002b980fcd729daaa248fd9316a5200e9b367f4ff2c42453e84201ca
-        consensus.MinBIP9WarningHeight = 836640; // segwit activation height + miner confirmation window
-        consensus.powLimit = uint256{"00ffff0000000000000000000000000000000000000000000000000000000000"};
+        consensus.BIP34Height = 0;
+        consensus.BIP34Hash = uint256{"000000006e5b4222eab7cce9ec5e1cb507152fcf65ebc0ffe555e8114aa11480"};
+        consensus.BIP65Height = 0;
+        consensus.BIP66Height = 0;
+        consensus.CSVHeight = 0;
+        consensus.SegwitHeight = 0;
+        consensus.MinBIP9WarningHeight = 0;
+        consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -244,20 +244,16 @@ public:
         m_assumed_blockchain_size = 93;
         m_assumed_chain_state_size = 19;
 
-        genesis = CreateGenesisBlock(1753427181, 99411666 , 0x1D00FFFF, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1794589074, 1783805895, 0x1D00FFFF, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256{"0000000043770b6cd3992ee9602eaa941d8a5de392c1f1baf1f55eb9cd898be6"});
+        assert(consensus.hashGenesisBlock == uint256{"000000006e5b4222eab7cce9ec5e1cb507152fcf65ebc0ffe555e8114aa11480"});
         assert(genesis.hashMerkleRoot == uint256{"57b495ee87db5e2aa6e7fdd746dc98c0eb5901282829679dfc831829fe41297a"});
 
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("testnet-seed.bitcoin.jonasschnelli.ch.");
-        vSeeds.emplace_back("seed.tbtc.petertodd.net.");
-        vSeeds.emplace_back("seed.testnet.bitcoin.sprovoost.nl.");
-        vSeeds.emplace_back("testnet-seed.bluematt.me."); // Just a static list of stable node(s), only supports x9
-        vSeeds.emplace_back("seed.testnet.achownodes.xyz."); // Ava Chow, only supports x1, x5, x9, x49, x809, x849, xd, x400, x404, x408, x448, xc08, xc48, x40c
-
+        vSeeds.emplace_back("dnsseed-test.bitcoin-02.net.");
+        
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
@@ -284,7 +280,7 @@ public:
                 .m_chain_tx_count = 66484552,
                 .blockhash = consteval_ctor(uint256{"0000000000000093bcb68c03a9a168ae252572d348a2eaeba2cdf9231d73206f"}),
             }
-        }; */
+        }; 
 
         chainTxData = ChainTxData{
             // Data from RPC: getchaintxstats 4096 000000000000000465b1a66c9f386308e8c75acef9201f3f577811da09fc90ad
@@ -292,6 +288,7 @@ public:
             .tx_count = 187917082,
             .dTxRate  = 3.265051477698455,
         };
+        */
     }
 };
 
@@ -312,7 +309,7 @@ public:
         consensus.CSVHeight = 1;
         consensus.SegwitHeight = 1;
         consensus.MinBIP9WarningHeight = 0;
-        consensus.powLimit = uint256S("00ffff0000000000000000000000000000000000000000000000000000000000");
+        consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -354,16 +351,15 @@ public:
         // assert(consensus.hashGenesisBlock == uint256S("003f0e15f164e2bb853c5885f2a92a38e79fbfa5c2f15dd077482f6529a0dd30"));
         // assert(genesis.hashMerkleRoot == uint256S("7f4ee7359ea73fa1c504843b54ed243e16b43f6b838c7d18b4c5ccdc808bac37"));
 
-        genesis = CreateGenesisBlock(1753427181, 99411666 , 0x1D00FFFF, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1794589074, 1783805895, 0x1D00FFFF, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256{"0000000043770b6cd3992ee9602eaa941d8a5de392c1f1baf1f55eb9cd898be6"});
+        assert(consensus.hashGenesisBlock == uint256{"000000006e5b4222eab7cce9ec5e1cb507152fcf65ebc0ffe555e8114aa11480"});
         assert(genesis.hashMerkleRoot == uint256{"57b495ee87db5e2aa6e7fdd746dc98c0eb5901282829679dfc831829fe41297a"});
 
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("seed.testnet4.bitcoin.sprovoost.nl."); // Sjors Provoost
-        vSeeds.emplace_back("seed.testnet4.wiz.biz."); // Jason Maurice
+        vSeeds.emplace_back("dnsseed-testnet4.bitcoin-02.net.");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -383,7 +379,7 @@ public:
                 {},
             }
         };
-
+        /*
         m_assumeutxo_data = {
             {}
         };
@@ -394,6 +390,7 @@ public:
             .tx_count = 757229,
             .dTxRate  = 0.01570402633472492,
         };
+        */
     }
 };
 

@@ -656,14 +656,14 @@ BOOST_AUTO_TEST_CASE(util_GetChainTypeString)
 
     // equivalent to "-testnet"
     // regtest in testnet section is ignored
-    const char* testnetconf = "testnet=1\nregtest=0\n[test]\nregtest=1";
+    const char* testnetconf = "testnet=1\nregtest=0\n[test-blu]\nregtest=1";
     std::string error;
 
     BOOST_CHECK(test_args.ParseParameters(0, argv_testnet, error));
     BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "main-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_testnet, error));
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(0, argv_testnet4, error));
     BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "main-blu");
@@ -675,18 +675,18 @@ BOOST_AUTO_TEST_CASE(util_GetChainTypeString)
     BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "regtest");
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_test_no_reg, error));
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_both, error));
     BOOST_CHECK_THROW(test_args.GetChainTypeString(), std::runtime_error);
 
     BOOST_CHECK(test_args.ParseParameters(0, argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_regtest, error));
     test_args.ReadConfigString(testnetconf);
@@ -694,23 +694,23 @@ BOOST_AUTO_TEST_CASE(util_GetChainTypeString)
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_test_no_reg, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_both, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_THROW(test_args.GetChainTypeString(), std::runtime_error);
 
-    // check setting the network to test (and thus making
-    // [test] regtest=1 potentially relevant) doesn't break things
-    test_args.SelectConfigNetwork("test");
+    // check setting the network to test-blu (and thus making
+    // [test-blu] regtest=1 potentially relevant) doesn't break things
+    test_args.SelectConfigNetwork("test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(0, argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_regtest, error));
     test_args.ReadConfigString(testnetconf);
@@ -718,7 +718,7 @@ BOOST_AUTO_TEST_CASE(util_GetChainTypeString)
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_test_no_reg, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_both, error));
     test_args.ReadConfigString(testnetconf);
@@ -921,7 +921,7 @@ BOOST_FIXTURE_TEST_CASE(util_ArgsMerge, ArgsMergeTestingSetup)
     // Results file is formatted like:
     //
     //   <input> || <IsArgSet/IsArgNegated/GetArg output> | <GetArgs output> | <GetUnsuitable output>
-    BOOST_CHECK_EQUAL(out_sha_hex, "46a70f7c618432ba4c15cd4fe9d35d1828d65081b7b8ba709617e446c1330c3d");
+    BOOST_CHECK_EQUAL(out_sha_hex, "8a4d272135ff136d8902e175bc28c8d0621ad6fa6ae29accb4d7486534303f60");
 }
 
 // Similar test as above, but for ArgsManager::GetChainTypeString function.
@@ -1024,7 +1024,7 @@ BOOST_FIXTURE_TEST_CASE(util_ChainMerge, ChainMergeTestingSetup)
     // Results file is formatted like:
     //
     //   <input> || <output>
-    BOOST_CHECK_EQUAL(out_sha_hex, "e016d5a84d337fbfe94bb6eaba608a63065d16264f4de93a39cd24a211a489e6");
+    BOOST_CHECK_EQUAL(out_sha_hex, "445b01961ce49ad481915de6799dbc12a93fc6556629dd3b5cff4a79eb47542e");
 }
 
 BOOST_AUTO_TEST_CASE(util_ReadWriteSettings)

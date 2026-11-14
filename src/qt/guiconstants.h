@@ -48,11 +48,11 @@ static const int TOOLTIP_WRAP_THRESHOLD = 80;
 
 #define QAPP_ORG_NAME "BitcoinBlu"
 #define QAPP_ORG_DOMAIN "bitcoin-blu.com"
-#define QAPP_APP_NAME_DEFAULT "BitcoinBlu-Qt"
-#define QAPP_APP_NAME_TESTNET "Bitcoin-Qt-testnet"
-#define QAPP_APP_NAME_TESTNET4 "Bitcoin-Qt-testnet4"
-#define QAPP_APP_NAME_SIGNET "Bitcoin-Qt-signet"
-#define QAPP_APP_NAME_REGTEST "Bitcoin-Qt-regtest"
+#define QAPP_APP_NAME_DEFAULT "Bitcoin-Blu-Qt"
+#define QAPP_APP_NAME_TESTNET "Bitcoin-Blu-Qt-testnet"
+#define QAPP_APP_NAME_TESTNET4 "Bitcoin-Blu-Qt-testnet4"
+#define QAPP_APP_NAME_SIGNET "Bitcoin-Blu-Qt-signet"
+#define QAPP_APP_NAME_REGTEST "Bitcoin-Blu-Qt-regtest"
 
 /* One gigabyte (GB) in bytes */
 static constexpr uint64_t GB_BYTES{1000000000};

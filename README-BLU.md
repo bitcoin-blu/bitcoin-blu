@@ -30,7 +30,7 @@ Compare chain name
 network | Bitcoin | Bitcoin-Blu
 | :--- | ---: | :---:
 | Mainnet | `main` | `main-blu`
-| Testnet | `test` | not started
+| Testnet | `test` | `test-blu`
 | Testnet4 | `testnet4` | not started
 | Regtest | `regtest` | not started
 | Signet | `signet` | not started
