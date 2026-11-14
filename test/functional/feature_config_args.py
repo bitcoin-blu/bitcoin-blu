@@ -371,7 +371,7 @@ class ConfArgsTest(BitcoinTestFramework):
     def test_acceptstalefeeestimates_arg_support(self):
         self.log.info("Test -acceptstalefeeestimates option support")
         conf_file = self.nodes[0].datadir_path / "bitcoinblu.conf"
-        for chain, chain_name in {("main-blu", ""), ("test", "testnet3"), ("signet", "signet"), ("testnet4", "testnet4")}:
+        for chain, chain_name in {("main-blu", ""), ("test-blu", "testnet3"), ("signet", "signet"), ("testnet4", "testnet4")}:
             util.write_config(conf_file, n=0, chain=chain_name, extra_config='acceptstalefeeestimates=1\n')
             self.nodes[0].assert_start_raises_init_error(expected_msg=f'Error: acceptstalefeeestimates is not supported on {chain} chain.')
         util.write_config(conf_file, n=0, chain="regtest")  # Reset to regtest
@@ -385,7 +385,7 @@ class ConfArgsTest(BitcoinTestFramework):
 
         # Testnet3 node will log the warning
         self.nodes[0].chain = 'testnet3'
-        self.nodes[0].replace_in_config([('regtest=', 'testnet='), ('[regtest]', '[test]')])
+        self.nodes[0].replace_in_config([('regtest=', 'testnet='), ('[regtest]', '[test-blu]')])
         with self.nodes[0].assert_debug_log([t3_warning_log]):
             self.start_node(0)
         # Some CI environments will have limited space and some others won't
@@ -400,7 +400,7 @@ class ConfArgsTest(BitcoinTestFramework):
 
         # Testnet4 node will not log the warning
         self.nodes[0].chain = 'testnet4'
-        self.nodes[0].replace_in_config([('testnet=', 'testnet4='), ('[test]', '[testnet4]')])
+        self.nodes[0].replace_in_config([('testnet=', 'testnet4='), ('[test-blu]', '[testnet4]')])
         with self.nodes[0].assert_debug_log([], unexpected_msgs=[t3_warning_log]):
             self.start_node(0)
         self.stop_node(0)

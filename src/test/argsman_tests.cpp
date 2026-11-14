@@ -656,14 +656,14 @@ BOOST_AUTO_TEST_CASE(util_GetChainTypeString)
 
     // equivalent to "-testnet"
     // regtest in testnet section is ignored
-    const char* testnetconf = "testnet=1\nregtest=0\n[test]\nregtest=1";
+    const char* testnetconf = "testnet=1\nregtest=0\n[test-blu]\nregtest=1";
     std::string error;
 
     BOOST_CHECK(test_args.ParseParameters(0, argv_testnet, error));
     BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "main-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_testnet, error));
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(0, argv_testnet4, error));
     BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "main-blu");
@@ -675,18 +675,18 @@ BOOST_AUTO_TEST_CASE(util_GetChainTypeString)
     BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "regtest");
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_test_no_reg, error));
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_both, error));
     BOOST_CHECK_THROW(test_args.GetChainTypeString(), std::runtime_error);
 
     BOOST_CHECK(test_args.ParseParameters(0, argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_regtest, error));
     test_args.ReadConfigString(testnetconf);
@@ -694,23 +694,23 @@ BOOST_AUTO_TEST_CASE(util_GetChainTypeString)
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_test_no_reg, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_both, error));
     test_args.ReadConfigString(testnetconf);
     BOOST_CHECK_THROW(test_args.GetChainTypeString(), std::runtime_error);
 
-    // check setting the network to test (and thus making
-    // [test] regtest=1 potentially relevant) doesn't break things
-    test_args.SelectConfigNetwork("test");
+    // check setting the network to test-blu (and thus making
+    // [test-blu] regtest=1 potentially relevant) doesn't break things
+    test_args.SelectConfigNetwork("test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(0, argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_testnet, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_regtest, error));
     test_args.ReadConfigString(testnetconf);
@@ -718,7 +718,7 @@ BOOST_AUTO_TEST_CASE(util_GetChainTypeString)
 
     BOOST_CHECK(test_args.ParseParameters(2, argv_test_no_reg, error));
     test_args.ReadConfigString(testnetconf);
-    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test");
+    BOOST_CHECK_EQUAL(test_args.GetChainTypeString(), "test-blu");
 
     BOOST_CHECK(test_args.ParseParameters(3, argv_both, error));
     test_args.ReadConfigString(testnetconf);
