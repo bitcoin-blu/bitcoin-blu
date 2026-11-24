@@ -21,7 +21,12 @@ VALID_DATA = [
         "bb1qtvq05x69au9mmejvqrcd63eefznseehsws3636",
         "00145b00fa1b45ef0bbde64c00f0dd473948a70ce6f0",
     ),
-     ("BB1SZEGQTCZYUG", "60021650"),
+    ("BB1SZEGQTCZYUG", "60021650"),
+    # Pay-to-anchor (OP_1 <0x4e73>). 14 characters, so it must not be sent down the Base58 path.
+    ("bb1pfees70edxn", "51024e73"),
+    ("BB1PFEES70EDXN", "51024e73"),
+    # 34-character P2PKH that starts with the "bb" HRP and must stay Base58.
+    ("BB14LgfSwWKJ21wXrQckETydDwjHy5qUQ4", "76a91447dd00000000000000000000000000000000000088ac"),
 ]
 
 

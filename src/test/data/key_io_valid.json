@@ -172,6 +172,41 @@
         }
     ],
     [
+        "bb1pfees70edxn",
+        "51024e73",
+        {
+            "chain": "main",
+            "isPrivkey": false,
+            "tryCaseFlip": true
+        }
+    ],
+    [
+        "tt1pfees7ae8gj",
+        "51024e73",
+        {
+            "chain": "test-blu",
+            "isPrivkey": false,
+            "tryCaseFlip": true
+        }
+    ],
+    [
+        "bbrt1pfeeswmrmrv",
+        "51024e73",
+        {
+            "chain": "regtest",
+            "isPrivkey": false,
+            "tryCaseFlip": true
+        }
+    ],
+    [
+        "BB14LgfSwWKJ21wXrQckETydDwjHy5qUQ4",
+        "76a91447dd00000000000000000000000000000000000088ac",
+        {
+            "chain": "main",
+            "isPrivkey": false
+        }
+    ],
+    [
         "tt1qcrh3yqn4nlleplcez2yndq2ry8h9ncg3mkwtjs",
         "0014c0ef1202759fff90ff19128936814321ee59e111",
         {

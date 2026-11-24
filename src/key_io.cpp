@@ -87,8 +87,14 @@ CTxDestination DecodeDestination(const std::string& str, const CChainParams& par
     uint160 hash;
     error_str = "";
 
-    // Note this will be false if it is a valid Bech32 address for a different network
-    bool is_bech32 = (ToLower(str.substr(0, params.Bech32HRP().size())) == params.Bech32HRP()) && (str.length() > 35);
+    // The "bb" HRP collides with some mainnet P2PKH addresses (version 0x19).
+    // Those addresses are always 34 characters and can start with "BB", so the
+    // prefix alone cannot separate them from Bech32. Every standard Bech32
+    // address has another length, including the 14-character pay-to-anchor
+    // address. A 15-byte witness program also encodes to 34 characters on bb
+    // and tt and stays on the Base58 path; no standard address has that length.
+    // Note this will be false if it is a valid Bech32 address for a different network.
+    bool is_bech32 = (ToLower(str.substr(0, params.Bech32HRP().size())) == params.Bech32HRP()) && (str.length() != 34);
 
     if (!is_bech32 && DecodeBase58Check(str, data, 21)) {
         // base58-encoded Bitcoin addresses.
